@@ -21,7 +21,7 @@ class App {
         this._initPortfolio();
 
         this._initTradeWidget();
-
+  
     }
 
 
@@ -29,8 +29,15 @@ class App {
     _initTable() {
         this._table = new Table({
             element: this._el.querySelector('[data-element="table"]'),
-            data: this._data
+            data: this._data,
+            onRowClick: (id) => {this._tradeItem(id);},
         })
+    }
+
+    _tradeItem(id) {
+        const coin = this._data.find(c => c.id === id);
+        //console.log(coin);
+        this._tradeWidget.trade(coin);
     }
 
     _initPortfolio() {
@@ -43,7 +50,9 @@ class App {
     _initTradeWidget() {
         this._tradeWidget = new TradeWidget({
             element: this._el.querySelector('[data-element="trade-widget"]')
-        })
+        });
+
+       
     }
 
     _render() {

@@ -2,7 +2,16 @@ class TradeWidget {
     constructor ({ element }) {
         this._el = element;
 
-        this._total = 0;
+        this._el.addEventListener('input', e => {
+            if (!e.target.closest('#amount')) return;
+
+            const value = e.target.value;
+
+            this._total = this._currentItem.price * Number(value);
+
+            this._updateDisplay(this._total);
+
+        });
         
     }
 
@@ -10,13 +19,27 @@ class TradeWidget {
         this._el.querySelector('.modal').classList.remove('open');      
     }
     
-_render() {
+    trade(item) {
+
+        this._currentItem = item;
+        
+        this._total = 0;
+
+        this._render(item);
+    }
+
+    _updateDisplay(value) {
+        this._totalEL = this._totalEL || this._el.querySelector('#item-total');
+        this._totalEL.textContent = value;
+    }
+
+_render(item) {
   this._el.innerHTML = `
     <div id="modal" class="modal open">
         <div class="modal-content">
-           <h4>Buying:</h4>
+           <h4>Buying ${item.name}</h4>
            <p>
-                Current price: .
+                Current price: ${item.price}.
                 Total: <span id="item-total">${this._total}</span>
            </p>
            <div class="row">
